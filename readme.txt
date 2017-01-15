@@ -7,4 +7,4 @@ http://<host>:<port>/BirthdayService/rest/birthday/findMatchBirthdays?month=<н�
 
 
 для проверки выполнения задачи, неообходимо перейти по ссылке
-http://<host>:<port>/BirthdayService/rest/birthday/checkirthdaysTaskDone?taskId=<id задачи>
+http://<host>:<port>/BirthdayService/rest/birthday/checkBirthdaysTaskDone?taskId=<id задачи>

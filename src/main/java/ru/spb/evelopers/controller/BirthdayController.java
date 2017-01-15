@@ -30,6 +30,7 @@ import java.util.regex.Pattern;
 public class BirthdayController {
 
     private String monthRegExp = "^(0?[1-9]|1[012])$";
+    private String digitRegExp = "^[0-9]+$";
     private static AtomicInteger idSequence = new AtomicInteger();
     private ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(10);
     private Map<Integer, Future<List<PersonInfo>>> tasks = new HashMap<>();
@@ -82,23 +83,27 @@ public class BirthdayController {
      * @param taskId - id задачи.
      * @return - список людей.
      */
-    @RequestMapping(value = "/checkirthdaysTaskDone", method = RequestMethod.GET)
-    public ResponseEntity checkirthdaysTaskDone(@RequestParam("taskId") String taskId) {
+        @RequestMapping(value = "/checkBirthdaysTaskDone", method = RequestMethod.GET)
+    public ResponseEntity checkBirthdaysTaskDone(@RequestParam("taskId") String taskId) {
         log.info("HTTP POST checkTaskDone with parameter task id" + (taskId == null ? "" : "?taskId=" + taskId));
         if (taskId != null && !taskId.isEmpty()) {
-            Future<List<PersonInfo>> userInfoFuture = tasks.get(Integer.valueOf(taskId));
-            if (userInfoFuture != null) {
-                if (userInfoFuture.isDone()) {
-                    try {
-                        return renderList(tasks.get(Integer.valueOf(taskId)).get());
-                    } catch (Exception e) {
-                        log.info("ERROR", e);
-                        e.printStackTrace();
+            Pattern pattern = Pattern.compile(monthRegExp);
+            Matcher matcher = pattern.matcher(taskId);
+            if (matcher.matches()) {
+                Future<List<PersonInfo>> userInfoFuture = tasks.get(Integer.valueOf(taskId));
+                if (userInfoFuture != null) {
+                    if (userInfoFuture.isDone()) {
+                        try {
+                            return renderList(tasks.get(Integer.valueOf(taskId)).get());
+                        } catch (Exception e) {
+                            log.info("ERROR", e);
+                            e.printStackTrace();
+                        }
+                    } else {
+                        InfoBean infoBean = new InfoBean();
+                        infoBean.setMessage(Messages.workingTaskMessage);
+                        return infoMessageResponse(infoBean);
                     }
-                } else {
-                    InfoBean infoBean = new InfoBean();
-                    infoBean.setMessage(Messages.workingTaskMessage);
-                    return infoMessageResponse(infoBean);
                 }
             }
         }
