@@ -27,7 +27,7 @@ public class BirthdayListProcessor {
     private static URI personsURI;
 
     /**
-     * Инициализация пути до файла.
+     * Инициализация пути до файла с данными.
      */
     static {
         try {
@@ -36,10 +36,15 @@ public class BirthdayListProcessor {
             if (appRes != null) {
                 File appPropFile = new File(appRes.getFile());
                 if (appPropFile.exists()) {
-                    InputStream is = new FileInputStream(appPropFile);
-                    Properties property = new Properties();
-                    property.load(is);
-                    personsFilePath = property.getProperty("persons.file.path");
+                    try (InputStream is = new FileInputStream(appPropFile)) {
+                        Properties property = new Properties();
+                        property.load(is);
+                        personsFilePath = property.getProperty("persons.file.path");
+                    } catch (IOException e) {
+                        log.error("ERROR read file application.properties", e);
+                        e.printStackTrace();
+                    }
+
                 }
             }
 
@@ -60,9 +65,6 @@ public class BirthdayListProcessor {
 
         } catch (URISyntaxException e) {
             log.error("ERROR read file persons.txt", e);
-            e.printStackTrace();
-        } catch (IOException e) {
-            log.error("ERROR read file application.properties", e);
             e.printStackTrace();
         }
     }

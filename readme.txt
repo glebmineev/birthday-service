@@ -8,3 +8,5 @@ http://<host>:<port>/BirthdayService/rest/birthday/findMatchBirthdays?month=<н�
 
 для проверки выполнения задачи, неообходимо перейти по ссылке
 http://<host>:<port>/BirthdayService/rest/birthday/checkTaskDone?taskId=<id задачи>
+
+Использована java 8
