@@ -87,7 +87,7 @@ public class BirthdayController {
     public ResponseEntity checkBirthdaysTaskDone(@RequestParam("taskId") String taskId) {
         log.info("HTTP POST checkTaskDone with parameter task id" + (taskId == null ? "" : "?taskId=" + taskId));
         if (taskId != null && !taskId.isEmpty()) {
-            Pattern pattern = Pattern.compile(monthRegExp);
+            Pattern pattern = Pattern.compile(digitRegExp);
             Matcher matcher = pattern.matcher(taskId);
             if (matcher.matches()) {
                 Future<List<PersonInfo>> userInfoFuture = tasks.get(Integer.valueOf(taskId));
