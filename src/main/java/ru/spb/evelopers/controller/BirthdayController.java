@@ -83,7 +83,7 @@ public class BirthdayController {
      * @param taskId - id задачи.
      * @return - список людей.
      */
-        @RequestMapping(value = "/checkBirthdaysTaskDone", method = RequestMethod.GET)
+    @RequestMapping(value = "/checkBirthdaysTaskDone", method = RequestMethod.GET)
     public ResponseEntity checkBirthdaysTaskDone(@RequestParam("taskId") String taskId) {
         log.info("HTTP POST checkTaskDone with parameter task id" + (taskId == null ? "" : "?taskId=" + taskId));
         if (taskId != null && !taskId.isEmpty()) {
