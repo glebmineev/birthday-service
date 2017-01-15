@@ -11,13 +11,8 @@ import ru.spb.evelopers.util.BirthdayListProcessor;
 import java.util.List;
 
 /**
- * Created by gleb on 14.01.17.
+ * DAO для работы с текстовым файлом.
  */
-
-/**
- * Методы для работы с текстовым файлом.
- */
-
 @Component
 @Log4j
 public class PersonsDAO implements IPersonsDAO {

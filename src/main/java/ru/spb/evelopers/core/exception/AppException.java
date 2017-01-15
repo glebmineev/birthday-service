@@ -1,8 +1,5 @@
 package ru.spb.evelopers.core.exception;
 
-/**
- * Created by gleb on 14.01.17.
- */
 public class AppException extends Exception {
 
     public AppException() {

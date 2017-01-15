@@ -21,7 +21,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Created by gleb on 1/12/17.
+ * Контроллер для работы с текстовым файлом,
+ * содержащим список имен и дней рождений.
  */
 @RestController
 @RequestMapping(value = "/birthday")
@@ -36,6 +37,11 @@ public class BirthdayController {
     @Autowired
     public IPersonService personService;
 
+    /**
+     * Поиск дней людей с днями рождения в указанном месяце.
+     * @param month - номер месяца (1 - 12)
+     * @return - id задачи.
+     */
     @RequestMapping(
             value = "/findMatchBirthdays",
             method = RequestMethod.GET,
@@ -44,26 +50,20 @@ public class BirthdayController {
     public String findMatchBirthdays(@RequestParam(value = "month", required = false) String month) {
         log.info("HTTP GET findMatchBirthdays" + (month == null ? "" : "?month=" + month));
         try {
-
             int monthDigits;
-
             if (month != null && !month.isEmpty()) {
-
                 Pattern pattern = Pattern.compile(monthRegExp);
                 Matcher matcher = pattern.matcher(month);
-
                 if (matcher.matches()) {
                     monthDigits = Integer.valueOf(month);
                 } else {
                     return Messages.validateWarningMessage;
                 }
-
             } else {
                 monthDigits = DateUtil.getCurrentMonth();
             }
 
             int id = idSequence.incrementAndGet();
-
             MatchBirthdayTask task =
                     new MatchBirthdayTask(personService, monthDigits);
             Future<List<PersonInfo>> submit = executor.submit(task);
@@ -77,9 +77,14 @@ public class BirthdayController {
         return null;
     }
 
+    /**
+     * Получение результата выполнения задачи.
+     * @param taskId - id задачи.
+     * @return - список людей.
+     */
     @RequestMapping(value = "/checkTask", method = RequestMethod.GET)
-    public ResponseEntity checkTask(@RequestParam("taskId") String taskId) {
-        log.info("HTTP POST checkTask with parameter task id" + (taskId == null ? "" : "?taskId=" + taskId));
+    public ResponseEntity checkTaskDone(@RequestParam("taskId") String taskId) {
+        log.info("HTTP POST checkTaskDone with parameter task id" + (taskId == null ? "" : "?taskId=" + taskId));
         if (taskId != null && !taskId.isEmpty()) {
             Future<List<PersonInfo>> userInfoFuture = tasks.get(Integer.valueOf(taskId));
             if (userInfoFuture != null) {

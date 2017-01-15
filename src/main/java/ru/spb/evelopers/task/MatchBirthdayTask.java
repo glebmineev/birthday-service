@@ -12,14 +12,9 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Created by gleb on 1/12/17.
- */
-
-/**
  * Асинхронная задача, ищет людей,
  * празднующих ДР в указанном месяце.
  */
-
 @Log4j
 public class MatchBirthdayTask implements Callable<List<PersonInfo>> {
 

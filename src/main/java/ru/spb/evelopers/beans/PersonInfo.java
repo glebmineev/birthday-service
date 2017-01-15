@@ -2,14 +2,15 @@ package ru.spb.evelopers.beans;
 
 import lombok.Data;
 
-/**
- * Created by gleb on 1/12/17.
- */
+
 @Data
 public class PersonInfo {
 
+    //Имя
     private String name;
+    //День рождения
     private String birthday;
+    //Сколько дней осталось до дня рождения
     private long daysBeforeBirthday;
 
     public PersonInfo(String name, String birthday, long daysBeforeBirthday) {

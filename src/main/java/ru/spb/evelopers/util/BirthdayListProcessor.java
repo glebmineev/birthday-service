@@ -19,13 +19,16 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * Created by gleb on 1/12/17.
+ * Обработчик файла с именами и днями рождениями.
  */
 @Log4j
 public class BirthdayListProcessor {
 
     private static URI personsURI;
 
+    /**
+     * Инициализация пути до файла.
+     */
     static {
         try {
             String personsFilePath = "";
@@ -64,6 +67,13 @@ public class BirthdayListProcessor {
         }
     }
 
+    /**
+     * Получение списка на основе текстового файла,
+     * с фильтрацией по месяцу.
+     * @param month - номер месяца
+     *
+     * @return - отфильтрованный список List<PersonInfo>.
+     */
     public static List<PersonInfo> parseBirthdayList(int month) {
         List<PersonInfo> birthdayList = new ArrayList<>();
 
@@ -85,6 +95,12 @@ public class BirthdayListProcessor {
         return birthdayList;
     }
 
+    /**
+     * Расчет дней до дня рождения.
+     * @param date - день родения.
+     *
+     * @return - число дней до дня роджения относительно текущей даты.
+     */
     public static long calculateDaysBeforeBirthday(String date) {
         try {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");

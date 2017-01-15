@@ -14,6 +14,9 @@ import java.util.List;
  * Created by gleb on 1/13/17.
  */
 
+/**
+ * Сервис для работы с текстовым файлом.
+ */
 @Component
 @Log4j
 public class PersonService implements IPersonService {

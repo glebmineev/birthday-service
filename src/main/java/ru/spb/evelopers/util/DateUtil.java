@@ -8,10 +8,6 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 
 /**
- * Created by gleb on 1/13/17.
- */
-
-/**
  * Утилиты для работы с датами.
  */
 @Log4j
@@ -27,6 +23,12 @@ public final class DateUtil {
         return currentTime.getMonthValue();
     }
 
+    /**
+     * Получение номера месяца из тектового представления даты.
+     *
+     * @param date - дата.
+     * @return - номер месяца.
+     */
     public static int getDateMonth(String date) {
         try {
             DateTimeFormatter formatter = new DateTimeFormatterBuilder()
