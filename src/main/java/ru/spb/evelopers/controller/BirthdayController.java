@@ -5,12 +5,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.spb.evelopers.beans.ErrorData;
 import ru.spb.evelopers.beans.InfoBean;
 import ru.spb.evelopers.beans.PersonInfo;
 import ru.spb.evelopers.services.IPersonService;
 import ru.spb.evelopers.task.MatchBirthdayTask;
 import ru.spb.evelopers.util.DateUtil;
+import ru.spb.evelopers.util.Messages;
 
 import java.util.*;
 import java.util.concurrent.Executors;
@@ -38,15 +38,16 @@ public class BirthdayController {
 
     @RequestMapping(
             value = "/findMatchBirthdays",
-            method = RequestMethod.GET)
+            method = RequestMethod.GET,
+            produces = "text/plain;charset=UTF-8")
     @ResponseBody
     public String findMatchBirthdays(@RequestParam(value = "month", required = false) String month) {
         log.info("HTTP GET findMatchBirthdays" + (month == null ? "" : "?month=" + month));
         try {
-            int id = idSequence.incrementAndGet();
 
-            if (month != null) {
-                int monthDigits;
+            int monthDigits;
+
+            if (month != null && !month.isEmpty()) {
 
                 Pattern pattern = Pattern.compile(monthRegExp);
                 Matcher matcher = pattern.matcher(month);
@@ -54,14 +55,19 @@ public class BirthdayController {
                 if (matcher.matches()) {
                     monthDigits = Integer.valueOf(month);
                 } else {
-                    monthDigits = DateUtil.getCurrentMonth();
+                    return Messages.validateWarningMessage;
                 }
 
-                MatchBirthdayTask task =
-                        new MatchBirthdayTask(personService, monthDigits);
-                Future<List<PersonInfo>> submit = executor.submit(task);
-                tasks.put(id, submit);
+            } else {
+                monthDigits = DateUtil.getCurrentMonth();
             }
+
+            int id = idSequence.incrementAndGet();
+
+            MatchBirthdayTask task =
+                    new MatchBirthdayTask(personService, monthDigits);
+            Future<List<PersonInfo>> submit = executor.submit(task);
+            tasks.put(id, submit);
 
             return String.valueOf(id);
         } catch (Exception e) {
@@ -71,10 +77,10 @@ public class BirthdayController {
         return null;
     }
 
-    @RequestMapping(value = "/checkTask", method = RequestMethod.POST)
+    @RequestMapping(value = "/checkTask", method = RequestMethod.GET)
     public ResponseEntity checkTask(@RequestParam("taskId") String taskId) {
         log.info("HTTP POST checkTask with parameter task id" + (taskId == null ? "" : "?taskId=" + taskId));
-        if (taskId != null) {
+        if (taskId != null && !taskId.isEmpty()) {
             Future<List<PersonInfo>> userInfoFuture = tasks.get(Integer.valueOf(taskId));
             if (userInfoFuture != null) {
                 if (userInfoFuture.isDone()) {
@@ -86,13 +92,13 @@ public class BirthdayController {
                     }
                 } else {
                     InfoBean infoBean = new InfoBean();
-                    infoBean.setMessage("Задача выполняется. Повторите запрос позже.");
+                    infoBean.setMessage(Messages.workingTaskMessage);
                     return infoMessageResponse(infoBean);
                 }
             }
         }
         InfoBean infoBean = new InfoBean();
-        infoBean.setMessage("Задачи с таким идентификатором нет.");
+        infoBean.setMessage(Messages.notTaskidMessage);
         return infoMessageResponse(infoBean);
     }
 
