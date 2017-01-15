@@ -82,8 +82,8 @@ public class BirthdayController {
      * @param taskId - id задачи.
      * @return - список людей.
      */
-    @RequestMapping(value = "/checkTask", method = RequestMethod.GET)
-    public ResponseEntity checkTaskDone(@RequestParam("taskId") String taskId) {
+    @RequestMapping(value = "/checkirthdaysTaskDone", method = RequestMethod.GET)
+    public ResponseEntity checkirthdaysTaskDone(@RequestParam("taskId") String taskId) {
         log.info("HTTP POST checkTaskDone with parameter task id" + (taskId == null ? "" : "?taskId=" + taskId));
         if (taskId != null && !taskId.isEmpty()) {
             Future<List<PersonInfo>> userInfoFuture = tasks.get(Integer.valueOf(taskId));
