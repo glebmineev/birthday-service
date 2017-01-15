@@ -96,10 +96,6 @@ public class BirthdayController {
         return infoMessageResponse(infoBean);
     }
 
-    private ResponseEntity<ErrorData> errorResponse(ErrorData data, HttpStatus status) {
-        return new ResponseEntity<>(data, status);
-    }
-
     private ResponseEntity<InfoBean> infoMessageResponse(InfoBean data) {
         return new ResponseEntity<>(data, HttpStatus.OK);
     }
@@ -107,13 +103,6 @@ public class BirthdayController {
     private ResponseEntity<List<PersonInfo>> renderList(List<PersonInfo> data) {
         return data == null ? new ResponseEntity<>(HttpStatus.NOT_FOUND) :
                 new ResponseEntity<>(data, HttpStatus.OK);
-    }
-
-    protected ErrorData createErrorData(String code, String message) {
-        ErrorData errorData = new ErrorData();
-        errorData.setCode(code);
-        errorData.setMessage(message);
-        return errorData;
     }
 
 }

@@ -37,7 +37,7 @@ public class MatchBirthdayTask implements Callable<List<PersonInfo>> {
 
     @Override
     public List<PersonInfo> call() throws Exception {
-        log.debug("start task : " + Thread.currentThread().getName() + "task delay : " + delay);
+        log.debug("start task : " + Thread.currentThread().getName());
         int delay = random.nextInt(max - min) + min;
         log.debug("task : " + Thread.currentThread().getName() + " was paused of" + delay);
         TimeUnit.MILLISECONDS.sleep(delay);
